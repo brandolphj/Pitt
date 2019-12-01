@@ -1,1 +1,114 @@
-//The first raft of prjoect containg the databasde of users
+package Security;
+
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
+
+public class AccessControl {
+
+   public static void main(String[] args) {
+
+       String userName, password;
+      
+       System.out.println("Are you a new User or Existing User?");
+       System.out.println("Enter 1 for Register");
+       System.out.println("Enter 2 for Login");
+      
+       Scanner sc = new Scanner(System.in);
+       int option = sc.nextInt();
+      
+       if (1 == option) {
+           System.out.println("Enter username: ");
+           userName = sc.next();
+           System.out.println("Enter password: ");
+           password = sc.next();
+           String result = registerNewUser(userName, password);
+           System.out.println(result);
+       } else if (2 == option) {
+           System.out.println("Enter username: ");
+           userName = sc.next();
+           System.out.println("Enter password: ");
+           password = sc.next();
+           loginUser(userName, password);
+       } else {
+           System.out.println("Invalid option!");
+       }
+      
+       sc.close();
+   }
+
+   private static String loginUser(String userName, String password) {
+      
+       File file = new File("AMU.txt");
+   Scanner input;
+       try {
+           input = new Scanner(file);
+           while (input.hasNext()) {
+           String user = input.next();
+           if (userName.equals(user)) {
+               System.out.println("Username found");
+               String hashedpassword = input.next();
+               if (hashedpassword.equals(getMD5TextOfWord(password)))  
+                       System.out.println("Access Granted!");
+               else {
+                       if (hashedpassword.equals(getMD5TextOfWord(readPassword())))
+                           System.out.println("Access Granted!");
+                       else
+                           System.out.println("Incorrect password.. Access Denied!");
+                   }
+                   }
+               }
+       } catch (FileNotFoundException e) {
+           
+           e.printStackTrace();
+       }
+  
+       return "Error in login..";
+   }
+//Asks for password again
+   private static String readPassword() {
+       System.out.println("Enter password again:");
+      
+       Scanner sc = new Scanner(System.in);
+       String pwd = sc.next();
+       sc.close();
+       return pwd;
+   }
+// prints users to user database file 
+   private static String registerNewUser(String userName, String password) {
+       BufferedWriter out;
+       try {
+           out = new BufferedWriter(new FileWriter("AMU.txt", true));
+           out.write(userName + " " + getMD5TextOfWord(password) + " " + password);
+       out.newLine();
+       out.close();
+       return "Registration Successful!";
+       } catch (IOException e) {
+           System.err.println(e.getMessage());
+       }
+       return "Error while registering..";
+   }
+  //creates hashing of passwords
+   private static String getMD5TextOfWord(String word) {
+   MessageDigest md;
+   String hashText = "";
+   try {
+   md = MessageDigest.getInstance("MD5");
+   byte[] messageDigest = md.digest(word.getBytes());
+   BigInteger number = new BigInteger(1, messageDigest);
+   hashText = number.toString(16);
+   } catch (NoSuchAlgorithmException e) {
+   e.printStackTrace();
+   }
+   return hashText;
+   }
+
+}
+
