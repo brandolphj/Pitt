@@ -1,1 +1,95 @@
+package Security;
+
+import java.io.*;
+import java.util.ArrayList;
+  
+        public class TestAlgorithm{
+        	static ArrayList<String> symbols1;
+
+            //print combination from string s of given length
+
+        	static void main(String s,String temp,int length){
+     		
+                if(length==0){
+                	
+                    symbols1.add(temp);
+                    
+                    return;
+
+                }
+
+                //else add each character to it and claa print on length -1
+
+                for(int i=0;i<s.length();i++)
+
+                    main(s,temp+s.charAt(i),length-1);
+
+            }
+
+            public static void main(String[] args) {
+            	
+            	String password = "cuck";
+                String s="@#$%&";
+                symbols1 = new ArrayList<>();
+
+                for(int i=1;i<=s.length();i++)
+                	
+                    main(s, "", i);
+                
+                String test = "";
+                String test2 = "";
+                String test3 = "";
+                String test4 = "";
+                String test5 = "";
+                String test6 = "";
+                for(String val : symbols1) {
+                	if(val.length() == 1){
+                		test = val + password;
+                		//System.out.println("test 1: " + test);
+                		//md5 on test
+                		
+                		//if we have a hit then exit you've won 
+                		
+                		//else keep testing 
+                		test = password + val;
+                		//System.out.println("test 2: " + test);
+                		   		
+                	} 
+                	else if(val.length() == 2) {
+
+		                //append two characters 	              
+			                
+			            	//xPassx 
+                			test = val.substring(0,1) + password + val.substring(1,2);
+                			System.out.println("test 1: " + test);
+			            	//xxPass
+                			test2 = val + password;
+                			System.out.println("test 2: " + test2);
+			            	//Passxx
+                			test3 = password + val;
+                			System.out.println("test 3: " + test3);
+                		//System.out.println(val);
+                		//System.out.println(val + "\t" + val.substring(0,1) + "\t" + val.substring(1,2));
+                		         		
+                	} 
+                	
+                	else if(val.length() == 3) {
+                		test4 = val.substring(0,1) + password + val.substring(0,2);
+            			System.out.println("test 4: " + test4);
+            			
+            			test5 = val.substring(0,2) + password + val.substring(0,1);
+            			System.out.println("test 5: " + test5);
+            			        			
+                	}
+                	
+                	else if(val.length() == 4) {
+                		test6 = val.substring(0,2) + password + val.substring(0,2);
+            			System.out.println("test 6: " + test6);
+            			
+            		
+                	}        	
+                	}
+                	
+                }
+            }
 
